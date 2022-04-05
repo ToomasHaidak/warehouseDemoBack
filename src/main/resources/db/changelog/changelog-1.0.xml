@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2022-04-04 loo tabel users" author="Toomas Haidak">
+        <createTable tableName="users">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_name" type="text"/>
+            <column name="user_type" type="text"/>
+            <column name="rep_business_user_id" type="int"/>
+            <column name="free_item_limit" type="int"/>
+            <column name="item_count" type="int"/>
+            <column name="amount_to_pay" type="numeric"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-04-04 loo tabel nodes" author="Toomas Haidak">
+        <createTable tableName="nodes">
+            <column name="node_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="parent_id" type="int"/>
+            <column name="user_id" type="int"/>
+            <column name="node_name" type="text"/>
+            <column name="node_lvl" type="int"/>
+            <column name="is_leaf" type="bool"/>
+            <column name="serialnumber" type="text"/>
+            <column name="weight" type="numeric"/>
+            <column name="value" type="numeric"/>
+            <column name="description" type="text"/>
+            <column name="item_picture" type="text"/>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>
