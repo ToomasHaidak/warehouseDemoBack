@@ -10,6 +10,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="user_name" type="text"/>
+            <column name="encoded_password" type="text"/>
             <column name="user_type" type="text"/>
             <column name="rep_business_user_id" type="int"/>
             <column name="free_item_limit" type="int"/>
@@ -33,6 +34,15 @@
             <column name="value" type="numeric"/>
             <column name="description" type="text"/>
             <column name="item_picture" type="text"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2022-04-04 loo tabel usersettings" author="Toomas Haidak">
+        <createTable tableName="defaultusersettings">
+            <column name="setting_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="default_free_item_limit" type="int"/>
+            <column name="default_itemcost_eur" type="numeric"/>
         </createTable>
     </changeSet>
 

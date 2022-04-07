@@ -19,6 +19,52 @@ public class WarehouseRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    public void registerUser(String nameToRegister, String encodedPassword, String userType) {
+        String sql = "INSERT INTO users (user_name, encoded_password, user_type) VALUES (:un, :ep, :ut)";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", nameToRegister);
+        paramMap.put("ep", encodedPassword);
+        paramMap.put("ut", userType);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public void setFreeItemLimitForBusiness(String businessName, int freeItemLimit) {
+        String sql = "UPDATE users SET free_item_limit = :fil WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", businessName);
+        paramMap.put("fil", freeItemLimit);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public int getUserID(String userName) {
+        String sql = "SELECT user_id FROM users WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", userName);
+        return jdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+    }
+
+    public int getBusinessID(String businessName) {
+        String sql = "SELECT user_id FROM users WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", businessName);
+        return jdbcTemplate.queryForObject(sql, paramMap, Integer.class);
+    }
+
+    public void setRepresentingBusinessID(String representingPerson, int businessID) {
+        String sql = "UPDATE users SET rep_business_user_id = :rpuid WHERE user_name = :rp";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("rpuid", businessID);
+        paramMap.put("rp", representingPerson);
+        jdbcTemplate.update(sql, paramMap);
+    }
+
+    public String getEncodedPassword(String userName) {
+        String sql = "SELECT encoded_password FROM users WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", userName);
+        return jdbcTemplate.queryForObject(sql, paramMap, String.class);
+    }
+
     public void addNode (String nodeName, int parentID) {
         String sql = "INSERT INTO nodes (node_name, parent_id) VALUES (:nn, :pid)";
         Map<String, Object> paramMap = new HashMap<>();
@@ -46,12 +92,12 @@ public class WarehouseRepository {
         }
     }
 
-    public void getAllDataForAUser(int userID) {
-        String sql = "Select * FROM nodes WHERE user_id = :uid";
+    public List<QueryResultDTO> getNodesOfParentX(int userID, int nodeLVL) {
+        String sql = "SELECT * FROM nodes WHERE user_id = :uid AND parent_id = :nl";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("uid", userID);
-        List<QueryResultDTO> result = jdbcTemplate.query(sql, paramMap, new WarehouseRepository.QueryResultDTORowMapper());
-        System.out.println(result.get(0).getNodeName());
+        paramMap.put("nl", nodeLVL);
+        return jdbcTemplate.query(sql, paramMap, new WarehouseRepository.QueryResultDTORowMapper());
     }
 
     public static class QueryResultDTORowMapper implements RowMapper<QueryResultDTO> {
@@ -71,6 +117,14 @@ public class WarehouseRepository {
             result.setDescription(resultSet.getString("description"));
             return result;
         }
+    }
+
+    public List<Integer> getIDOfChildrenOfNodeX(int userID, int parentID) {
+        String sql = "SELECT node_id FROM nodes WHERE user_id = :uid AND parent_id = :pi";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("uid", userID);
+        paramMap.put("pi", parentID);
+        return jdbcTemplate.queryForList(sql, paramMap, Integer.class);
     }
 
     public int getUserItemCount(int userID) {
@@ -107,6 +161,32 @@ public class WarehouseRepository {
         paramMap.put("fil", freeItemLimit);
         paramMap.put("un", userName);
         jdbcTemplate.update(sql,paramMap);
+    }
+
+    public void setDefaultFreeItemLimit(int defaultFreeItemLimit) {
+        String sql = "UPDATE defaultusersettings SET default_free_item_limit = :dfil";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("dfil", defaultFreeItemLimit);
+        jdbcTemplate.update(sql,paramMap);
+    }
+
+    public void setDefaultItemCost(Double defaultItemCost) {
+        String sql = "UPDATE defaultusersettings SET default_itemcost_eur = :dic";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("dic", defaultItemCost);
+        jdbcTemplate.update(sql,paramMap);
+    }
+
+    public int getDefaultFreeItemLimit() {
+        String sql = "SELECT default_free_item_limit FROM defaultusersettings";
+        Map<String, Object> paramMap = new HashMap<>();
+        return jdbcTemplate.queryForObject(sql,paramMap, Integer.class);
+    }
+
+    public Double getDefaultItemCost() {
+        String sql = "SELECT default_itemcost_eur FROM defaultusersettings";
+        Map<String, Object> paramMap = new HashMap<>();
+        return jdbcTemplate.queryForObject(sql,paramMap, Double.class);
     }
 
 
