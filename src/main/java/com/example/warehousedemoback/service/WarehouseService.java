@@ -37,7 +37,6 @@ public class WarehouseService {
     }
 
     public String login(String userName, String userPassword, String userType) {
-        System.out.println(warehouseRepository.getUserType(userName));
         if(!warehouseRepository.getUserType(userName).equals(userType) && warehouseRepository.ifUserRepresentsBusiness(userName)<1){
             throw new RuntimeException("Vale kasutaja tüüp");
         }
@@ -112,7 +111,6 @@ public class WarehouseService {
     }
 
     public void setNrItemsExceedingLimit(AllUsersDataDTO user) {
-        System.out.println(user.getItemCount() + " - " + user.getFreeItemLimit());
         user.setNrItemsExceedingLimit(user.getItemCount() - user.getFreeItemLimit());
     }
 
