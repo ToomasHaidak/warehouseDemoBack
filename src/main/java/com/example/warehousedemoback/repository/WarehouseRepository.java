@@ -151,7 +151,7 @@ public class WarehouseRepository {
     public List<String> getBusinessUserList() {
         String sql = "SELECT user_name FROM users WHERE user_type = :ut";
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("ut", "business");
+        paramMap.put("ut", "Business");
         return jdbcTemplate.queryForList(sql, paramMap, String.class);
     }
 

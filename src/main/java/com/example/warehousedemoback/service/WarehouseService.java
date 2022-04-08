@@ -71,11 +71,9 @@ public class WarehouseService {
                 setUserItemCount(user, userID);
                 setNrOfSlots(user, userID);
                 setTotalItemWeight(user, userID);
-                System.out.println(user.getUserName());
-                System.out.println(user.getUserType());
-                if (user.getUserType().equals("business")) {
-                    setNrItemsExceedingLimit(user, userID);
-                    setAmountToPay(user, userID);
+                if (user.getUserType().equals("Business")) {
+                    setNrItemsExceedingLimit(user);
+                    setAmountToPay(user);
                 }
             }
         } catch(Exception e) {
@@ -113,11 +111,12 @@ public class WarehouseService {
         user.setItemCount(warehouseRepository.getUserItemCount(userID));
     }
 
-    public void setNrItemsExceedingLimit(AllUsersDataDTO user, int userID) {
+    public void setNrItemsExceedingLimit(AllUsersDataDTO user) {
+        System.out.println(user.getItemCount() + " - " + user.getFreeItemLimit());
         user.setNrItemsExceedingLimit(user.getItemCount() - user.getFreeItemLimit());
     }
 
-    public void setAmountToPay(AllUsersDataDTO user, int userID) {
+    public void setAmountToPay(AllUsersDataDTO user) {
         int itemsOverLimit = user.getItemCount() - user.getFreeItemLimit();
         if(itemsOverLimit > 0) {
             user.setAmountToPay(itemsOverLimit * warehouseRepository.getDefaultItemCost());
