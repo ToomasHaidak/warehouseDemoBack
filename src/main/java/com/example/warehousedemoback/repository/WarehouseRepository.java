@@ -189,6 +189,20 @@ public class WarehouseRepository {
         return jdbcTemplate.queryForObject(sql,paramMap, Double.class);
     }
 
+    public String getUserType(String userName) {
+        String sql = "SELECT user_type FROM users WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", userName);
+        return jdbcTemplate.queryForObject(sql,paramMap, String.class);
+    }
+
+    public int ifUserRepresentsBusiness(String userName) {
+        String sql = "SELECT rep_business_user_id FROM users WHERE user_name = :un";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("un", userName);
+        return jdbcTemplate.queryForObject(sql,paramMap, Integer.class);
+    }
+
 
 
 //    public void getAllDataForAUser() {

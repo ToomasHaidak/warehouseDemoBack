@@ -51,9 +51,9 @@ public class WarehouseController {
         warehouseService.registerUser(nameToRegister, userPassword, userType, representingPerson);
     }
 
-    @GetMapping("login/{userName}/{userPassword}")
-    public String login(@PathVariable("userName") String userName, @PathVariable("userPassword") String userPassword ) {
-        return warehouseService.login(userName, userPassword);
+    @GetMapping("login/{userName}/{userPassword}/{userType}")
+    public String login(@PathVariable("userName") String userName, @PathVariable("userPassword") String userPassword, @PathVariable("userType") String userType) {
+        return warehouseService.login(userName, userPassword, userType);
     }
 
     @GetMapping("api/test")

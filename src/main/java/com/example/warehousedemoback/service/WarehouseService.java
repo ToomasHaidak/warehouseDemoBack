@@ -24,7 +24,7 @@ public class WarehouseService {
     @Autowired LoginService loginService;
 
     public void registerUser(String nameToRegister, String userPassword, String userType, String representingPerson) {
-        if(userType.equals("private")){
+        if(userType.equals("Private")){
         String encodedPassword = encodePassword(userPassword);
         warehouseRepository.registerUser(nameToRegister, encodedPassword, userType);
         } else {
@@ -36,11 +36,15 @@ public class WarehouseService {
         }
     }
 
-    public String login(String userName, String userPassword) {
+    public String login(String userName, String userPassword, String userType) {
+        System.out.println(warehouseRepository.getUserType(userName));
+        if(!warehouseRepository.getUserType(userName).equals(userType) && warehouseRepository.ifUserRepresentsBusiness(userName)<1){
+            throw new RuntimeException("Vale kasutaja tüüp");
+        }
         if(validatePassword(userName, userPassword)) {
             return loginService.login(userName);
         } else {
-            return "Vale salasõna";
+            throw new RuntimeException("Vale salasõna");
         }
     }
 
